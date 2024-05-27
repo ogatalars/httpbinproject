@@ -1,0 +1,26 @@
+
+# Projeto de Estudos com httpbin.org
+
+Este repositório contém implementações em diferentes linguagens (Python, C#, Node.js e Go) que utilizam a API do httpbin.org para realizar requisições HTTP de exemplo. O objetivo é fornecer um guia prático para aprender e comparar como diferentes linguagens lidam com requisições HTTP.
+
+## Estrutura do Repositório
+
+```
+.
+├── python/
+│   ├── http_requests.py
+│   ├── main.py
+│   ├── venv/
+│   └── README.md
+├── csharp/
+│   ├── Program.cs
+│   ├── HttpRequests.cs
+│   └── README.md
+├── node/
+│   ├── index.js
+│   ├── package.json
+│   └── README.md
+└── go/
+    ├── main.go
+    └── README.md
+```
