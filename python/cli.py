@@ -2,7 +2,7 @@ import requests
 import click
 
 @click.command()
-@click.option('--url', prompt='URL do site', help='A URL do site que você deseja acessar.')
+@click.option('--url', prompt='URL do site', help='Digite o URL do site que você deseja acessar.')
 @click.option('--method', prompt='Método HTTP (GET, POST, etc.)', help='O método HTTP que você deseja usar.')
 @click.option('--check-status', is_flag=True, prompt='Você deseja verificar apenas o status code? (yes/no)', help='Verificar apenas o status code da resposta.')
 def make_request(url, method, check_status):
