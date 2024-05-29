@@ -26,6 +26,27 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(json_data['form']['name'], 'John')
         self.assertEqual(json_data['form']['age'], '30')
 
+    def test_put_request(self):
+        response = self.client.put('/put', data={'name': 'John', 'age': '30'})
+        self.assertEqual(response.status_code, 200)
+        json_data = response.get_json()
+        self.assertEqual(json_data['form']['name'], 'John')
+        self.assertEqual(json_data['form']['age'], '30')
+
+    def test_patch_request(self):
+        response = self.client.patch('/patch', data={'name': 'John', 'age': '30'})
+        self.assertEqual(response.status_code, 200)
+        json_data = response.get_json()
+        self.assertEqual(json_data['form']['name'], 'John')
+        self.assertEqual(json_data['form']['age'], '30')
+
+    def test_delete_request(self):
+        response = self.client.delete('/delete?name=John&age=30')
+        self.assertEqual(response.status_code, 200)
+        json_data = response.get_json()
+        self.assertEqual(json_data['args']['name'], 'John')
+        self.assertEqual(json_data['args']['age'], '30')
+
     def test_headers(self):
         response = self.client.get('/headers')
         self.assertEqual(response.status_code, 200)
