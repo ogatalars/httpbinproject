@@ -7,7 +7,6 @@ def create_app():
     load_dotenv()  
     app = Flask(__name__)
     app.config.from_object('config.DevelopmentConfig')
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
     app.register_blueprint(main)
 
