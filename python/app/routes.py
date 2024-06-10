@@ -1,6 +1,20 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, make_response
 
 main = Blueprint('main', __name__)
+
+
+status_messages = {
+    200: "OK",
+    201: "Created",
+    202: "Accepted",
+    204: "No Content",
+    400: "Bad Request",
+    401: "Unauthorized",
+    403: "Forbidden",
+    404: "Not Found",
+    405: "Method Not Allowed",
+    500: "Internal Server Error"
+}
 
 @main.route('/')
 def home():
@@ -66,4 +80,7 @@ def headers():
 
 @main.route('/status/<int:status_code>', methods=['GET'])
 def status(status_code):
-    return '', status_code
+    message = status_messages.get(status_code, "Unknown Status Code")
+    response = make_response(message, status_code)
+    response.mimetype = "text/plain"
+    return response
