@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify, make_response
 
 main = Blueprint('main', __name__)
 
-
 status_messages = {
     200: "OK",
     201: "Created",
@@ -84,3 +83,23 @@ def status(status_code):
     response = make_response(message, status_code)
     response.mimetype = "text/plain"
     return response
+
+@main.route('/ip', methods=['GET'])
+def get_ip():
+    return jsonify({
+        'origin': request.remote_addr
+    })
+
+@main.route('/user-agent', methods=['GET'])
+def get_user_agent():
+    return jsonify({
+        'user-agent': request.headers.get('User-Agent')
+    })
+
+@main.errorhandler(404)
+def not_found(error):
+    return jsonify({"error": "Not found"}), 404
+
+@main.errorhandler(500)
+def internal_error(error):
+    return jsonify({"error": "Internal server error"}), 500
