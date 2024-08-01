@@ -84,6 +84,24 @@ def status(status_code):
     response.mimetype = "text/plain"
     return response
 
+@main.route('/cookies/set/<name>/<value>', methods=['GET'])
+def set_cookie(name, value):
+    response = make_response(jsonify({"cookies": {name: value}}))
+    response.set_cookie(name, value)
+    return response
+
+@main.route('/cookies', methods=['GET'])
+def get_cookies():
+    cookies = request.cookies
+    return jsonify({"cookies": cookies})
+
+@main.route('/cookies/delete', methods=['GET'])
+def delete_cookie():
+    response = make_response(jsonify({"cookies": "deleted"}))
+    for cookie in request.cookies:
+        response.delete_cookie(cookie)
+    return response
+
 @main.route('/ip', methods=['GET'])
 def get_ip():
     return jsonify({
@@ -94,6 +112,20 @@ def get_ip():
 def get_user_agent():
     return jsonify({
         'user-agent': request.headers.get('User-Agent')
+    })
+
+@main.route('/anything', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])
+@main.route('/anything/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])
+def anything(path):
+    return jsonify({
+        'args': request.args,
+        'data': request.data.decode('utf-8') if request.data else None,
+        'form': request.form,
+        'json': request.json if request.is_json else None,
+        'headers': dict(request.headers),
+        'method': request.method,
+        'origin': request.remote_addr,
+        'url': request.url
     })
 
 @main.errorhandler(404)
