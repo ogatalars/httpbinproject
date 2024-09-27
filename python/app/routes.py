@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify, make_response
 
 main = Blueprint('main', __name__)
 
-
 status_messages = {
     200: "OK",
     201: "Created",
@@ -84,3 +83,55 @@ def status(status_code):
     response = make_response(message, status_code)
     response.mimetype = "text/plain"
     return response
+
+@main.route('/cookies/set/<name>/<value>', methods=['GET'])
+def set_cookie(name, value):
+    response = make_response(jsonify({"cookies": {name: value}}))
+    response.set_cookie(name, value)
+    return response
+
+@main.route('/cookies', methods=['GET'])
+def get_cookies():
+    cookies = request.cookies
+    return jsonify({"cookies": cookies})
+
+@main.route('/cookies/delete', methods=['GET'])
+def delete_cookie():
+    response = make_response(jsonify({"cookies": "deleted"}))
+    for cookie in request.cookies:
+        response.delete_cookie(cookie)
+    return response
+
+@main.route('/ip', methods=['GET'])
+def get_ip():
+    return jsonify({
+        'origin': request.remote_addr
+    })
+
+@main.route('/user-agent', methods=['GET'])
+def get_user_agent():
+    return jsonify({
+        'user-agent': request.headers.get('User-Agent')
+    })
+
+@main.route('/anything', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])
+@main.route('/anything/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])
+def anything(path):
+    return jsonify({
+        'args': request.args,
+        'data': request.data.decode('utf-8') if request.data else None,
+        'form': request.form,
+        'json': request.json if request.is_json else None,
+        'headers': dict(request.headers),
+        'method': request.method,
+        'origin': request.remote_addr,
+        'url': request.url
+    })
+
+@main.errorhandler(404)
+def not_found(error):
+    return jsonify({"error": "Not found"}), 404
+
+@main.errorhandler(500)
+def internal_error(error):
+    return jsonify({"error": "Internal server error"}), 500
