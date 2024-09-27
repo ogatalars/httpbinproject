@@ -14,6 +14,6 @@ venv.bak/
 
 # Other ignores (add as necessary)
 ...
-node_modules
+**/node_modules
 dist
 .env
